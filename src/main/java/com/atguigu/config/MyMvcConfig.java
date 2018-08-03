@@ -1,10 +1,13 @@
 package com.atguigu.config;
 
+import com.atguigu.component.LoginHandlerInterceptor;
 import com.atguigu.component.MyLocaleResolver;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 /*
@@ -30,7 +33,28 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {
             public void addViewControllers(ViewControllerRegistry registry) {
                 registry.addViewController("/").setViewName("index");
                 registry.addViewController("/index.html").setViewName("index");
+                registry.addViewController("/main.html").setViewName("dashboard");
             }
+
+            //注册拦截器
+            @Override
+            public void addInterceptors(InterceptorRegistry registry) {
+                //静态资源：*.css, *.js
+                //SpringBoot已经做好了静态资源映射，因此不用排除静态资源的使用1.10
+                //springboot2.0以后要重新指定静态资源的位置啊
+                registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
+                        .excludePathPatterns("/index.html", "/", "/user/login");
+            }
+
+            /*//配置静态资源
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry.addResourceHandler("/**")
+                        .addResourceLocations("classpath:/META-INF/resources")
+                        .addResourceLocations("classpath:/resources/")
+                        .addResourceLocations("classpath:/static/asserts/");
+                super.addResourceHandlers(registry);
+            }*/
         };
         return adapter;
     }
