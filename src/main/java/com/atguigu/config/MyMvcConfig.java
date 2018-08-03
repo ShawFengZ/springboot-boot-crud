@@ -43,18 +43,10 @@ public class MyMvcConfig extends WebMvcConfigurerAdapter {
                 //SpringBoot已经做好了静态资源映射，因此不用排除静态资源的使用1.10
                 //springboot2.0以后要重新指定静态资源的位置啊
                 registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
-                        .excludePathPatterns("/index.html", "/", "/user/login");
+                        .excludePathPatterns("/index.html", "/", "/user/login", "/asserts/css/signin.css",
+                                "/webjars/bootstrap/4.0.0/css/bootstrap.css", "/asserts/img/bootstrap-solid.svg");
             }
 
-            /*//配置静态资源
-            @Override
-            public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler("/**")
-                        .addResourceLocations("classpath:/META-INF/resources")
-                        .addResourceLocations("classpath:/resources/")
-                        .addResourceLocations("classpath:/static/asserts/");
-                super.addResourceHandlers(registry);
-            }*/
         };
         return adapter;
     }
